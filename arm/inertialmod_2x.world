@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <world name="inertialmod_2x">
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <include>
+      <uri>file://models/ur10_schunk_hybrid_inertialmod_2x</uri>
+      <pose>0 0 1.0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file://models/block</uri>
+      <pose>1.1843 0.342 1.0116 0 0 0</pose>  
+    </include>
+  </world>
+</sdf>
