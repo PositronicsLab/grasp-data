@@ -1,5 +1,9 @@
 #include "ur10_schunk_controller.h"
 
+#include <sstream>
+
+#define MAX_SIM_TIME 100.0
+
 //-----------------------------------------------------------------------------
 
 GZ_REGISTER_MODEL_PLUGIN( ur10_schunk_controller_c )
@@ -155,7 +159,7 @@ void ur10_schunk_controller_c::Load( gazebo::physics::ModelPtr model, sdf::Eleme
   _world->Reset();  
 
   // compute the base slip value
-  _base_slip = compute_slip();
+  //_base_slip = compute_slip();
 
   // set the starting velocity for the joints
   const double PERIOD = 5.0;
@@ -172,18 +176,44 @@ void ur10_schunk_controller_c::Load( gazebo::physics::ModelPtr model, sdf::Eleme
   _updateConnection = gazebo::event::Events::ConnectWorldUpdateBegin(
     boost::bind( &ur10_schunk_controller_c::Update, this ) );
 
+  // Get targets
+  gazebo::math::Vector3 c_v, c_omega;
+  // left gripper energy constants
+  c_v = _finger_l->GetWorldPose().pos - _target->GetWorldPose().pos;
+  _target_c_v_l = c_v;
+  c_omega = to_omega( _finger_l->GetWorldPose().rot, _target->GetWorldPose().rot );
+  _target_c_omega_l = c_omega;
+  // right gripper energy constants
+  c_v = _finger_r->GetWorldPose().pos - _target->GetWorldPose().pos;
+  _target_c_v_r = c_v;
+  c_omega = to_omega( _finger_r->GetWorldPose().rot, _target->GetWorldPose().rot );
+  _target_c_omega_r = c_omega;
+  printf( "found block target\n" );
+
+
   // -- LOGGING --
+/*
+  std::string engine_name = _world->GetPhysicsEngine()->GetType();
+  std::string world_name = _world->GetName();
+  std::stringstream ss_logname;
+  ss_logname << engine_name << "_" << world_name << ".log";
+*/
   std::string engine_name = _world->GetPhysicsEngine()->GetType();
   std::string world_name = _world->GetName();
   std::stringstream ss_logname;
   ss_logname << engine_name << "_" << world_name << ".log";
 
-  slip_log = boost::shared_ptr<log_c>( new log_c( ss_logname.str() ) );
-  slip_log->open();
+  energy_log = boost::shared_ptr<log_c>( new log_c( ss_logname.str() ) );
+  energy_log->open();
+
+//  slip_log = boost::shared_ptr<log_c>( new log_c( ss_logname.str() ) );
+//  slip_log->open();
   //slip_log->write( "test" );
   //slip_log->close();
 
   //std::cout << ss_data.str() << std::endl;
+
+  previous_t = 0.0;
 
   // -- FIN --
   printf( "ur10_schunk_controller has initialized\n" );
@@ -194,7 +224,45 @@ void ur10_schunk_controller_c::Update( ) {
 
   // get the current time
   double t = _world->GetSimTime().Double();
+  double dt = t - previous_t;
+  double real_time = _world->GetRealTime().Double(); 
 
+  std::stringstream data;
+  std::vector<double> avgKEs;
+
+  //std::cout << "t : " << t << std::endl;
+  data << t << "," << real_time;
+  // compute the energy of the target
+  gazebo::physics::ModelPtr target = _target;
+  gazebo::physics::LinkPtr body = target->GetLink("body");
+  assert( body );
+
+  // get the inertial properties of the box
+  gazebo::physics::InertialPtr gz_inertial = body->GetInertial();
+  double m = gz_inertial->GetMass();
+  gazebo::math::Vector3 pm = gz_inertial->GetPrincipalMoments();
+  gazebo::math::Matrix3 I( pm.x, 0.0, 0.0, 0.0, pm.y, 0.0, 0.0, 0.0, pm.z);
+
+  double KE_l = energy( _finger_l, target, _target_c_v_l, _target_c_omega_l, m, I, dt );
+  double KE_r = energy( _finger_r, target, _target_c_v_r, _target_c_omega_r, m, I, dt );
+
+  double avg_KE = (KE_l + KE_r) / 2.0;
+  //avgKEs.push_back( avg_KE );
+
+  //std::cout << i << " KE[l,r,avg],pos : " << KE_l<< "," << KE_r << "," << avg_KE << "," << target->GetWorldPose().pos << std::endl;
+  data << "," << "0" << "," << KE_l << "," << KE_r << "," << avg_KE << "," << target->GetWorldPose().pos;
+  
+  //std::cout << "--------------------" << std::endl;
+  data << std::endl;
+  energy_log->write( data.str() );
+
+  // check for exit condition
+  if( fabs(avg_KE) > 1.0e7 ) exit( 0 );
+  if( t >= MAX_SIM_TIME ) exit( 0 );
+  
+
+
+/*
   double slip_distance = compute_slip();
 
   std::stringstream ss_slipdata;
@@ -205,7 +273,7 @@ void ur10_schunk_controller_c::Update( ) {
     slip_log->close();
     exit( 0 );
   }
-
+*/
 
   // determinet the desired position and velocity for the controller 
   const double PERIOD = 5.0;
@@ -266,6 +334,7 @@ void ur10_schunk_controller_c::Update( ) {
   _finger_actuator_r->SetForce(0,-1); // close
   //_finger_actuator_r->SetForce(0,0.00001);  //open
 
+  previous_t = t;
 }
 
 //-----------------------------------------------------------------------------
@@ -283,6 +352,105 @@ double ur10_schunk_controller_c::compute_slip( void ) {
   }
 
   return 1;
+}
+
+//-----------------------------------------------------------------------------
+gazebo::math::Vector3 ur10_schunk_controller_c::to_omega( gazebo::math::Quaternion q, gazebo::math::Quaternion qd ) {
+  gazebo::math::Vector3 omega;
+  omega.x = 2 * (-q.x * qd.w + q.w * qd.x - q.z * qd.y + q.y * qd.z);
+  omega.y = 2 * (-q.y * qd.w + q.z * qd.x + q.w * qd.y - q.x * qd.z);
+  omega.z = 2 * (-q.z * qd.w - q.y * qd.x + q.x * qd.y + q.w * qd.z);
+  return omega;
+
+}
+
+//-----------------------------------------------------------------------------
+gazebo::math::Quaternion ur10_schunk_controller_c::deriv(gazebo::math::Quaternion q, gazebo::math::Vector3 w) {
+  gazebo::math::Quaternion qd;
+
+  qd.w = .5 * (-q.x * w.x - q.y * w.y - q.z * w.z); 
+  qd.x = .5 * (+q.w * w.x + q.z * w.y - q.y * w.z);
+  qd.y = .5 * (-q.z * w.x + q.w * w.y + q.x * w.z);
+  qd.z = .5 * (+q.y * w.x - q.x * w.y + q.w * w.z);
+
+  return qd;
+}
+
+//-----------------------------------------------------------------------------
+double ur10_schunk_controller_c::energy( gazebo::physics::LinkPtr gripper, gazebo::physics::ModelPtr grip_target, gazebo::math::Vector3 c_v, gazebo::math::Vector3 c_omega, double m, gazebo::math::Matrix3 I, double dt ) {
+
+    gazebo::math::Pose x = grip_target->GetWorldPose();
+
+    //desired pose
+    gazebo::math::Pose x_des;
+    gazebo::math::Vector3 delta = gripper->GetWorldPose().pos - grip_target->GetWorldPose().pos;
+    c_v = x.rot.RotateVector( c_v );
+    x_des.pos = x.pos + (delta - c_v);
+
+    gazebo::math::Quaternion dq = deriv( x.rot, c_omega );
+    x_des.rot = x.rot + dq;
+    x_des.rot.Normalize();
+
+    gazebo::math::Vector3 linvel = grip_target->GetWorldLinearVel();
+    // desired linear velocity
+    gazebo::math::Vector3 linvel_des = gripper->GetWorldLinearVel();
+
+    gazebo::math::Vector3 angvel = grip_target->GetWorldAngularVel();   
+    // desired angular velocity
+    gazebo::math::Vector3 angvel_des = gripper->GetWorldAngularVel();
+
+    //if( !first_pass ) {
+    double KE = energy( m, I, dt, x, x_des, linvel, linvel_des, angvel, angvel_des );
+    return KE;
+}
+
+//-----------------------------------------------------------------------------
+double ur10_schunk_controller_c::energy( double m, gazebo::math::Matrix3 I, double dt, gazebo::math::Pose current_pose, gazebo::math::Pose desired_pose, gazebo::math::Vector3 current_linvel, gazebo::math::Vector3 desired_linvel, gazebo::math::Vector3 current_angvel, gazebo::math::Vector3 desired_angvel ) {
+  gazebo::math::Vector3 x = current_pose.pos;
+  gazebo::math::Vector3 x_star = desired_pose.pos;
+  gazebo::math::Vector3 xd = current_linvel;
+  gazebo::math::Vector3 xd_star = desired_linvel;
+  gazebo::math::Quaternion q = current_pose.rot;
+  gazebo::math::Quaternion q_star = desired_pose.rot;
+
+  gazebo::math::Vector3 thetad = current_angvel;
+  gazebo::math::Vector3 thetad_star = desired_angvel;
+
+/*
+  std::cout << "m:" << m << std::endl;
+  std::cout << "I:" << I << std::endl;
+  std::cout << "dt:" << dt << std::endl;
+  std::cout << "x:" << x << std::endl;
+  std::cout << "x_star:" << x_star << std::endl;
+  std::cout << "xd:" << xd << std::endl;
+  std::cout << "xd_star:" << xd_star << std::endl;
+  std::cout << "q:" << q << std::endl;
+  std::cout << "q_star:" << q_star << std::endl;
+  std::cout << "thetad:" << thetad << std::endl;
+  std::cout << "thetad_star:" << thetad_star << std::endl;
+*/
+
+  gazebo::math::Vector3 v;
+  gazebo::math::Vector3 omega;
+
+  gazebo::math::Quaternion qd = (q_star - q) * (1.0 / dt);
+//  std::cout << "qd:" << qd << std::endl;
+
+  // assert qd not normalized
+  const double EPSILON = 1e8;
+  double mag = qd.x * qd.x + qd.y * qd.y + qd.z * qd.z + qd.w * qd.w;
+  //std::cout << "mag:" << mag << std::endl;
+  //assert( fabs( mag - 1.0 ) > EPSILON );
+
+  v = (x_star - x) / dt + (xd_star - xd);
+//  std::cout << "v:" << v << std::endl;
+  omega = to_omega( q, qd ) + (thetad_star - thetad);
+//  std::cout << "omega:" << omega << std::endl;
+
+  //                 linear          +        angular
+  double KE = (0.5 * v.Dot( v ) * m) + (0.5 * omega.Dot( I * omega ));
+//  std::cout << "KE:" << KE << std::endl;
+  return KE;
 }
 
 //-----------------------------------------------------------------------------

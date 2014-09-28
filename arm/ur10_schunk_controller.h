@@ -56,6 +56,24 @@ private:
 
   double _base_slip;
 
+  boost::shared_ptr<log_c> energy_log;
+
+  // left gripper energy constants
+  gazebo::math::Vector3 _target_c_v_l;
+  gazebo::math::Vector3 _target_c_omega_l;
+  // right gripper energy constants
+  gazebo::math::Vector3 _target_c_v_r;
+  gazebo::math::Vector3 _target_c_omega_r;
+
+  static double energy( gazebo::physics::LinkPtr gripper, gazebo::physics::ModelPtr grip_target, gazebo::math::Vector3 c_v, gazebo::math::Vector3 c_omega, double target_mass, gazebo::math::Matrix3 target_I_tensor, double dt );
+
+  static double energy( double mass, gazebo::math::Matrix3 I_tensor, double dt, gazebo::math::Pose current_pose, gazebo::math::Pose desired_pose, gazebo::math::Vector3 current_linvel, gazebo::math::Vector3 desired_linvel, gazebo::math::Vector3 current_angvel, gazebo::math::Vector3 desired_angvel );
+
+  static gazebo::math::Vector3 to_omega( gazebo::math::Quaternion q, gazebo::math::Quaternion q_dot );
+  static gazebo::math::Quaternion deriv(gazebo::math::Quaternion q, gazebo::math::Vector3 w);
+
+  double previous_t;
+
 public:
   ur10_schunk_controller_c( void );
   virtual ~ur10_schunk_controller_c( void );
