@@ -9,6 +9,8 @@
 #include <gazebo/common/Events.hh>
 #include <gazebo/physics/physics.hh>
 
+#include "log.h"
+
 //-----------------------------------------------------------------------------
 
 #define NEWTONS_PER_TARGET 100.0
@@ -37,8 +39,32 @@ private:
   // the list of block targets in the grasp
   gazebo::physics::Model_V _targets;
 
+  // left gripper energy constants
+  std::vector<gazebo::math::Vector3> _targets_c_v_l;
+  std::vector<gazebo::math::Vector3> _targets_c_omega_l;
+  // right gripper energy constants
+  std::vector<gazebo::math::Vector3> _targets_c_v_r;
+  std::vector<gazebo::math::Vector3> _targets_c_omega_r;
+
   // the force to be applied at each of the grippers
   double _force_at_gripper;
+
+  gazebo::math::Vector3 _gripper_l_initial;
+  gazebo::math::Vector3 _gripper_r_initial;
+
+  double gripper_travel( gazebo::math::Vector3 initial_pos, gazebo::math::Vector3 current_pos );
+  //void assess_closure( double sim_time );
+
+  boost::shared_ptr<log_c> energy_log;
+
+  static double energy( gazebo::physics::LinkPtr gripper, gazebo::physics::ModelPtr grip_target, gazebo::math::Vector3 c_v, gazebo::math::Vector3 c_omega, double target_mass, gazebo::math::Matrix3 target_I_tensor, double dt );
+
+  static double energy( double mass, gazebo::math::Matrix3 I_tensor, double dt, gazebo::math::Pose current_pose, gazebo::math::Pose desired_pose, gazebo::math::Vector3 current_linvel, gazebo::math::Vector3 desired_linvel, gazebo::math::Vector3 current_angvel, gazebo::math::Vector3 desired_angvel );
+
+  static gazebo::math::Vector3 to_omega( gazebo::math::Quaternion q, gazebo::math::Quaternion q_dot );
+  static gazebo::math::Quaternion deriv(gazebo::math::Quaternion q, gazebo::math::Vector3 w);
+
+  double previous_t;
 
 public:
   robot_c( void );

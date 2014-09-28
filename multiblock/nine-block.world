@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.5">
-  <world name="eleven-block">
+  <world name="nine-block">
     <include>
       <uri>model://sun</uri>
     </include>
@@ -10,12 +10,8 @@
     </include>
 -->
     <include>
-      <uri>file://models/robot-eleven-block</uri>
+      <uri>file://models/robot-nine-block</uri>
       <pose>0 0 0.5 0 0 0</pose>
-    </include>
-    <include>
-      <uri>file://models/block</uri>
-      <pose>0 0.5 0.5 0 0 0</pose>
     </include>
     <include>
       <uri>file://models/block</uri>
@@ -52,10 +48,6 @@
     <include>
       <uri>file://models/block</uri>
       <pose>0 -0.4 0.5 0 0 0</pose>
-    </include>
-    <include>
-      <uri>file://models/block</uri>
-      <pose>0 -0.5 0.5 0 0 0</pose>
     </include>
     <gui>
       <camera name='user_camera'>
