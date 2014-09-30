@@ -1,0 +1,212 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <model name="robot">
+    <link name="root">
+      <pose>0 0 0 0 0 0</pose>
+    </link>
+    <link name="gripper_l">
+      <pose>0 -0.45 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>6.667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>6.667</iyy>
+          <iyz>0</iyz>
+          <izz>6.667</izz>
+        </inertia>
+        <mass>1.0</mass>
+      </inertial>
+      <collision name="gripper_l_col">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.2 0.1 0.2</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>100</mu>          <!-- DO NOT MODIFY -->
+              <mu2>100</mu2>        <!-- DO NOT MODIFY -->
+              <fdir1>0 0 0</fdir1>
+              <slip1>0.0</slip1>
+              <slip2>0.0</slip2>
+            </ode>
+            <bullet>
+              <friction>100</friction>                  <!-- DO NOT MODIFY -->
+              <friction2>100</friction2>                <!-- DO NOT MODIFY --> 
+              <fdir1>0 0 0</fdir1>
+              <rolling_friction>100</rolling_friction>  <!-- DO NOT MODIFY -->
+            </bullet>
+          </friction>
+          <contact>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e12</kp>
+              <kd>1.0</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0.0</min_depth>
+            </ode>
+            <bullet>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e12</kp>
+              <kd>1.0</kd>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+      <visual name="gripper_l_vis">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.2 0.1 0.2</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Blue</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+
+    <link name="gripper_r">
+      <pose>0 0.45 0 0 0 0</pose>
+      <self_collide>true</self_collide>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>6.667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>6.667</iyy>
+          <iyz>0</iyz>
+          <izz>6.667</izz>
+        </inertia>
+        <mass>1.0</mass>
+      </inertial>
+      <collision name="gripper_r_col">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.2 0.1 0.2</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>100</mu>          <!-- DO NOT MODIFY -->
+              <mu2>100</mu2>        <!-- DO NOT MODIFY -->
+              <fdir1>0 0 0</fdir1>
+              <slip1>0.0</slip1>
+              <slip2>0.0</slip2>
+            </ode>
+            <bullet>
+              <friction>100</friction>                  <!-- DO NOT MODIFY -->
+              <friction2>100</friction2>                <!-- DO NOT MODIFY --> 
+              <fdir1>0 0 0</fdir1>
+              <rolling_friction>100</rolling_friction>  <!-- DO NOT MODIFY -->
+            </bullet>
+          </friction>
+          <contact>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e12</kp>
+              <kd>1.0</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0.0</min_depth>
+            </ode>
+            <bullet>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e12</kp>
+              <kd>1.0</kd>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+      <visual name="gripper_r_vis">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.2 0.1 0.2</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Blue</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="fixed" type="revolute">
+      <parent>world</parent>
+      <child>root</child>
+      <pose>0 0 0 0 0 0</pose>
+      <axis> 
+        <xyz>0 0 1</xyz>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+        </limit>
+        <dynamics>
+          <damping>1.0</damping>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <cfm_damping>1</cfm_damping>
+        </ode>
+      </physics>
+    </joint> 
+ 
+    <joint name="actuator_l" type="prismatic"> 
+      <parent>root</parent>
+      <child>gripper_l</child>
+      <axis>
+        <dynamics>
+          <damping>0.0</damping>
+          <friction>0.0</friction>
+        </dynamics>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.4</upper>
+        </limit>
+      </axis>
+    </joint>
+
+    <joint name="actuator_r" type="prismatic"> 
+      <parent>root</parent>
+      <child>gripper_r</child>
+      <axis>
+        <dynamics>
+          <damping>0.0</damping>
+          <friction>0.0</friction>
+        </dynamics>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-0.4</lower>
+          <upper>0</upper>
+        </limit>
+      </axis>
+    </joint>
+
+    <plugin name='multiblock-controller' filename='libmultiblock-controller.so'>
+    </plugin>
+
+  </model>
+</sdf>

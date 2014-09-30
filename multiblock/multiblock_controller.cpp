@@ -93,7 +93,7 @@ void robot_c::Load( gazebo::physics::ModelPtr model, sdf::ElementPtr sdf ) {
   std::string engine_name = _world->GetPhysicsEngine()->GetType();
   std::string world_name = _world->GetName();
   std::stringstream ss_logname;
-  ss_logname << engine_name << "_" << world_name << ".log";
+  ss_logname << engine_name << "-" << world_name << ".log";
 
   energy_log = boost::shared_ptr<log_c>( new log_c( ss_logname.str() ) );
   energy_log->open();
@@ -148,8 +148,14 @@ void robot_c::Update( void ) {
 
   // check for exit condition
   for( std::vector<double>::iterator it = avgKEs.begin(); it != avgKEs.end(); it++ ) {
-    if( fabs(*it) > 1.0e7 ) exit( 0 );
-    if( t >= MAX_SIM_TIME ) exit( 0 );
+    if( fabs(*it) > 1.0e7 ) {
+      printf( "Kinetic Energy of a block exceeded 1e7... Killing sim.\n" );
+      exit( 0 );
+    }
+    if( t >= MAX_SIM_TIME ) {
+      printf( "Maximum simulation time exceeded... Killing sim\n" );
+      exit( 0 );
+    }
   }
 
 

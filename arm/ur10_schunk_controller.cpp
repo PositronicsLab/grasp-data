@@ -201,7 +201,7 @@ void ur10_schunk_controller_c::Load( gazebo::physics::ModelPtr model, sdf::Eleme
   std::string engine_name = _world->GetPhysicsEngine()->GetType();
   std::string world_name = _world->GetName();
   std::stringstream ss_logname;
-  ss_logname << engine_name << "_" << world_name << ".log";
+  ss_logname << engine_name << "-" << world_name << ".log";
 
   energy_log = boost::shared_ptr<log_c>( new log_c( ss_logname.str() ) );
   energy_log->open();
@@ -257,8 +257,14 @@ void ur10_schunk_controller_c::Update( ) {
   energy_log->write( data.str() );
 
   // check for exit condition
-  if( fabs(avg_KE) > 1.0e7 ) exit( 0 );
-  if( t >= MAX_SIM_TIME ) exit( 0 );
+  if( fabs(avg_KE) > 1.0e7 ) {
+    printf( "Kinetic Energy of the block exceeded 1e7... Killing sim.\n" );
+    exit( 0 );
+  }
+  if( t >= MAX_SIM_TIME ) {
+    printf( "Maximum simulation time exceeded... Killing sim\n" );
+    exit( 0 );
+  }
   
 
 

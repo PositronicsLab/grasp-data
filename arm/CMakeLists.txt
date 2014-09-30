@@ -13,16 +13,28 @@ set( LIBS
 add_library( ur10-schunk-controller SHARED ur10_schunk_controller.cpp ${HDRS})
 target_link_libraries( ur10-schunk-controller ${LIBS} )
 
-# Copy data files
+# Copy models
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/models DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/primitiveall.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/polygonalblock.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/polygonalhand.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/polygonalall.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/joinedblock.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/inertialmod_10x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/inertialmod_2x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/inertialmod_4x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+
+# Copy high friction data
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-primitiveall.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-polygonalblock.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-polygonalhand.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-polygonalall.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-joinedblock.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-inertialmod_10x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-inertialmod_2x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-inertialmod_4x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+
+# Copy very high friction data
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-primitiveall.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-polygonalblock.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-polygonalhand.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-polygonalall.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-joinedblock.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-inertialmod_10x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-inertialmod_2x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-inertialmod_4x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 
 # Copy setup file and substitute correct path into file
 SET( SEARCH_REGEX "%BUILD_DIR%" )
