@@ -334,10 +334,10 @@ void ur10_schunk_controller_c::Update( ) {
   _wrist3_actuator->SetForce(0, wrist3_f);
 
   // Simple close fingers test case
-  _finger_actuator_l->SetForce(0, 1);  // close
+  _finger_actuator_l->SetForce(0, 100);  // close
   //_finger_actuator_l->SetForce(0, -0.00001);  // open
 
-  _finger_actuator_r->SetForce(0,-1); // close
+  _finger_actuator_r->SetForce(0,-100); // close
   //_finger_actuator_r->SetForce(0,0.00001);  //open
 
   previous_t = t;
