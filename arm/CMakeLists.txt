@@ -22,9 +22,11 @@ file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-polygonalblock.world DESTINA
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-polygonalhand.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-polygonalall.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-joinedblock.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-inertialmod_10x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-inertialmod_1x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-inertialmod_2x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-inertialmod_3x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-inertialmod_4x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/highfriction-inertialmod_10x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 
 # Copy very high friction data
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-primitiveall.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
@@ -32,9 +34,11 @@ file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-polygonalblock.world DES
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-polygonalhand.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-polygonalall.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-joinedblock.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-inertialmod_10x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-inertialmod_1x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-inertialmod_2x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-inertialmod_3x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-inertialmod_4x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/veryhighfriction-inertialmod_10x.world DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 
 # Copy setup file and substitute correct path into file
 SET( SEARCH_REGEX "%BUILD_DIR%" )
