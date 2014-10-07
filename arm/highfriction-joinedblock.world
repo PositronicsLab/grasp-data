@@ -56,6 +56,10 @@
       <uri>model://sun</uri>
     </include>
     <include>
+      <uri>file://models/backdrop</uri>
+      <pose>0 0 -100 0 0 0</pose>
+    </include>
+    <include>
       <uri>file://models/ur10_schunk_hybrid_joinedblock-highfriction</uri>
       <pose>0 0 1.0 0 0 0</pose>
     </include>
