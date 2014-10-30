@@ -2,7 +2,7 @@ reveal-scenarios
 ================
 please refer to the [Wiki](https://github.com/semajrolyat/reveal-scenarios/wiki) for detailed information on experimentation
 
-Wiki Index
+[Index](https://github.com/semajrolyat/reveal-scenarios/wiki/Index)  
 [Overview](https://github.com/semajrolyat/reveal-scenarios/wiki/Overview)  
 -[Metric](https://github.com/semajrolyat/reveal-scenarios/wiki/Overview#metric)  
 -[Scenarios](https://github.com/semajrolyat/reveal-scenarios/wiki/Overview#scenarios)  
