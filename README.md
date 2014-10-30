@@ -19,4 +19,3 @@ please refer to the [Wiki](https://github.com/semajrolyat/reveal-scenarios/wiki)
 
 [Anaylsis](https://github.com/semajrolyat/reveal-scenarios/wiki/Analysis)  
 -[Results](https://github.com/semajrolyat/reveal-scenarios/wiki/Analysis#results)  
--[Conclusions](https://github.com/semajrolyat/reveal-scenarios/wiki/Analysis#conclusions)  
