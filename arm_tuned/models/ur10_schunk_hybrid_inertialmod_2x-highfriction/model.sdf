@@ -1,0 +1,563 @@
+<?xml version="1.0" ?>
+<sdf version='1.5'>
+  <model name='ur10_schunk_hybrid'>
+    <!-- begin: ur10 arm -->
+    <link name='base_link'>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/collision/Base.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/visual/Base.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='world_joint' type='revolute'>
+      <child>base_link</child>
+      <parent>world</parent>
+      <axis>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+        <xyz>0 0 1</xyz>
+      </axis>
+    </joint>
+    <link name='shoulder_link'>
+      <pose>0 0 0.1273 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.5</mass>
+        <inertia>
+          <ixx>0.5</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.5</iyy>
+          <iyz>0</iyz>
+          <izz>0.5</izz>
+        </inertia>
+      </inertial>
+      <collision name='shoulder_link_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/collision/Shoulder.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='shoulder_link_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/visual/Shoulder.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='shoulder_pan_joint' type='revolute'>
+      <child>shoulder_link</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-6.28319</lower>
+          <upper>6.28319</upper>
+          <effort>330</effort>
+          <velocity>2.16</velocity>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='upper_arm_link'>
+      <pose>0 0.220941 0.1273 3.14159 1.57079 3.14159</pose>
+      <inertial>
+        <pose>0 0 0.306 0 0 0</pose>
+        <mass>0.25</mass>
+        <inertia>
+          <ixx>0.25</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.25</iyy>
+          <iyz>0</iyz>
+          <izz>0.25</izz>
+        </inertia>
+      </inertial>
+      <collision name='upper_arm_link_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/collision/UpperArm.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='upper_arm_link_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/visual/UpperArm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='shoulder_lift_joint' type='revolute'>
+      <child>upper_arm_link</child>
+      <parent>shoulder_link</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-6.28319</lower>
+          <upper>6.28319</upper>
+          <effort>330</effort>
+          <velocity>2.16</velocity>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='forearm_link'>
+      <pose>0.612 0.049041 0.1273 3.14159 1.57079 3.14159</pose>
+      <inertial>
+        <pose>0 0 0.28615 0 0 0</pose>
+        <mass>0.125</mass>
+        <inertia>
+          <ixx>0.125</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.125</iyy>
+          <iyz>0</iyz>
+          <izz>0.125</izz>
+        </inertia>
+      </inertial>
+      <collision name='forearm_link_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/collision/Forearm.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='forearm_link_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/visual/Forearm.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='elbow_joint' type='revolute'>
+      <child>forearm_link</child>
+      <parent>upper_arm_link</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-6.28319</lower>
+          <upper>6.28319</upper>
+          <effort>150</effort>
+          <velocity>3.15</velocity>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='wrist_1_link'>
+      <pose>1.1843 0.049041 0.1273 3.14159 3.58979e-09 3.14159</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.0625</mass>
+        <inertia>
+          <ixx>0.0625</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0625</iyy>
+          <iyz>0</iyz>
+          <izz>0.0625</izz>
+        </inertia>
+      </inertial>
+      <collision name='wrist_1_link_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/collision/Wrist1.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='wrist_1_link_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/visual/Wrist1.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='wrist_1_joint' type='revolute'>
+      <child>wrist_1_link</child>
+      <parent>forearm_link</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-6.28319</lower>
+          <upper>6.28319</upper>
+          <effort>54</effort>
+          <velocity>3.2</velocity>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='wrist_2_link'>
+      <pose>1.1843 0.163941 0.1273 3.14159 3.58979e-09 3.14159</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.03125</mass>
+        <inertia>
+          <ixx>0.03125</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.03125</iyy>
+          <iyz>0</iyz>
+          <izz>0.03125</izz>
+        </inertia>
+      </inertial>
+      <collision name='wrist_2_link_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/collision/Wrist2.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='wrist_2_link_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/visual/Wrist2.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='wrist_2_joint' type='revolute'>
+      <child>wrist_2_link</child>
+      <parent>wrist_1_link</parent>
+      <axis>
+        <xyz>0 0 -1</xyz>
+        <limit>
+          <lower>-6.28319</lower>
+          <upper>6.28319</upper>
+          <effort>54</effort>
+          <velocity>3.2</velocity>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='wrist_3_link'>
+      <pose>1.1843 0.163941 0.0116 3.14159 3.58979e-09 3.14159</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.015625</mass>
+        <inertia>
+          <ixx>0.015625</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.015625</iyy>
+          <iyz>0</iyz>
+          <izz>0.015625</izz>
+        </inertia>
+      </inertial>
+      <collision name='wrist_3_link_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/collision/Wrist3.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='wrist_3_link_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://ur10/meshes/visual/Wrist3.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='wrist_3_joint' type='revolute'>
+      <child>wrist_3_link</child>
+      <parent>wrist_2_link</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-6.28319</lower>
+          <upper>6.28319</upper>
+          <effort>54</effort>
+          <velocity>3.2</velocity>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <!-- end: ur10 arm -->
+
+    <!-- begin: schunk mpg 80 hand -->
+    <link name="hand">
+      <pose>1.1843 0.256 0.0116 0 0 0</pose> 
+      <self_collide>false</self_collide>
+      <inertial>
+        <pose>0 0.035 0 0 0 0</pose>
+        <mass>0.0078125</mass>
+        <inertia>
+          <ixx>0.0078125</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0078125</iyy>
+          <iyz>0</iyz>
+          <izz>0.0078125</izz>
+        </inertia>
+      </inertial>
+      <visual name="hand_geom_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://schunk_mpg_80/meshes/visual/SCHUNK_MPG-80_BASE.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="hand_geom_collision">
+        <pose>0 0.035 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.08 0.07 0.042</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name="hand_tab1_geom_collision">
+        <pose>-0.043 0.036 0.009 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.006 0.012 0.012</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name="hand_tab2_geom_collision">
+        <pose>-0.043 0.036 -0.009 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.006 0.012 0.012</size>
+          </box>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="fixed_hand_to_wrist" type="revolute"> 
+      <parent>wrist_3_link</parent>
+      <child>hand</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+      </axis>
+    </joint>
+
+    <link name="l_finger">
+      <pose>1.1843 0.256 0.0116 0 0 0</pose> 
+      <self_collide>false</self_collide>
+      <inertial>
+        <pose>-0.0205 0.0798 0 0 0 0</pose>
+        <mass>0.00390625</mass>
+        <inertia>
+          <ixx>0.00390625</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00390625</iyy>
+          <iyz>0</iyz>
+          <izz>0.00390625</izz>
+        </inertia>
+      </inertial>
+      <visual name="l_finger_geom_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://schunk_mpg_80/meshes/visual/SCHUNK_MPG-80_LEFT_FINGER.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="l_finger_tip_geom_collision">
+        <pose>-0.0205 0.0798 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.012 0.0194 0.024</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>100</mu>          <!-- DO NOT MODIFY -->
+              <mu2>100</mu2>        <!-- DO NOT MODIFY -->
+              <fdir1>0 0 0</fdir1>
+              <slip1>0.0</slip1>
+              <slip2>0.0</slip2>
+            </ode>
+            <bullet>
+              <friction>100</friction>                  <!-- DO NOT MODIFY -->
+              <friction2>100</friction2>                <!-- DO NOT MODIFY --> 
+              <fdir1>0 0 0</fdir1>
+              <rolling_friction>100</rolling_friction>  <!-- DO NOT MODIFY -->
+            </bullet>
+          </friction>
+          <contact>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e12</kp>
+              <kd>1e8</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0.002</min_depth>
+            </ode>
+            <bullet>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e12</kp>
+              <kd>1.0</kd>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name="r_finger">
+      <pose>1.1843 0.256 0.0116 0 0 0</pose> 
+      <self_collide>false</self_collide>
+      <inertial>
+        <pose>0.0205 0.0798 0 0 0 0</pose>
+        <mass>0.00390625</mass>
+        <inertia>
+          <ixx>0.00390625</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00390625</iyy>
+          <iyz>0</iyz>
+          <izz>0.00390625</izz>
+        </inertia>
+      </inertial>
+      <visual name="r_finger_geom_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://schunk_mpg_80/meshes/visual/SCHUNK_MPG-80_RIGHT_FINGER.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="r_finger_tip_geom_collision">
+        <pose>0.0205 0.0798 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.012 0.0194 0.024</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>100</mu>          <!-- DO NOT MODIFY -->
+              <mu2>100</mu2>        <!-- DO NOT MODIFY -->
+              <fdir1>0 0 0</fdir1>
+              <slip1>0.0</slip1>
+              <slip2>0.0</slip2>
+            </ode>
+            <bullet>
+              <friction>100</friction>                  <!-- DO NOT MODIFY -->
+              <friction2>100</friction2>                <!-- DO NOT MODIFY --> 
+              <fdir1>0 0 0</fdir1>
+              <rolling_friction>100</rolling_friction>  <!-- DO NOT MODIFY -->
+            </bullet>
+          </friction>
+          <contact>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e12</kp>
+              <kd>1e8</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0.002</min_depth>
+            </ode>
+            <bullet>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e12</kp>
+              <kd>1.0</kd>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+
+    <joint name="l_finger_actuator" type="prismatic"> 
+      <parent>hand</parent>
+      <child>l_finger</child>
+      <axis>
+        <dynamics>
+          <damping>10.0</damping>
+          <friction>0.0</friction>
+        </dynamics>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.014</upper>
+        </limit>
+      </axis>
+      <physics>
+        <ode>
+          <implicit_spring_damper>1</implicit_spring_damper>
+        </ode>
+      </physics>
+    </joint>
+
+    <joint name="r_finger_actuator" type="prismatic"> 
+      <parent>hand</parent>
+      <child>r_finger</child>
+      <axis>
+        <dynamics>
+          <damping>10.0</damping>
+          <friction>0.0</friction>
+        </dynamics>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-0.014</lower>
+          <upper>0</upper>
+        </limit>
+      </axis>
+      <physics>
+        <ode>
+          <implicit_spring_damper>1</implicit_spring_damper>
+        </ode>
+      </physics>
+   </joint>
+    <!-- end: schunk mpg 80 hand -->
+
+    <plugin name='ur10_schunk_controller' filename='libur10-schunk-controller.so'>
+    </plugin>
+
+  </model>
+</sdf>
