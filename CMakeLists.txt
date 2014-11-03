@@ -22,4 +22,6 @@ link_directories( ${GAZEBO_LIBRARY_DIRS} )
 
 add_subdirectory( arm )
 add_subdirectory( multiblock )
+add_subdirectory( arm_tuned )
+add_subdirectory( multiblock_tuned )
 add_subdirectory( render_plugin )
